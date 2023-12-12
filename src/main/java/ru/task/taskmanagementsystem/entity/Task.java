@@ -1,25 +1,40 @@
 package ru.task.taskmanagementsystem.entity;
 
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
+import jakarta.persistence.*;
+import lombok.*;
 
+
+@Getter
+@Setter
+@Builder
+@RequiredArgsConstructor
+@AllArgsConstructor
 public class Task {
 
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "title")
     private String title;
 
+    @Column(name = "description")
     private String description;
 
+    @Column(name = "status")
+    @Builder.Default
     @Enumerated(EnumType.STRING)
-    private TaskStatus status;
+    private TaskStatus status = TaskStatus.WAIT;
 
+    @Column(name = "priority")
+    @Builder.Default
     @Enumerated(EnumType.STRING)
-    private TaskPriority priority;
+    private TaskPriority priority = TaskPriority.MEDIUM;
 
-    // todo maybe need @ManyToOne
-    private Long authorId;
+    @Column(name = "author_id")
+    private Long authorId;          // todo maybe need @ManyToOne
 
-    // todo maybe need @ManyToOne
-    private Long executorId;
+    @Column(name = "executor_id")
+    private Long executorId;        // todo maybe need @ManyToOne
 }
