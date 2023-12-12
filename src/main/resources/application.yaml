@@ -1,0 +1,10 @@
+server:
+  port: 8091
+  servlet:
+    context-path: /taskmanager
+
+application:
+  security:
+    jwt:
+      secret-key: 
+      expiration: 604800000 # - a week
