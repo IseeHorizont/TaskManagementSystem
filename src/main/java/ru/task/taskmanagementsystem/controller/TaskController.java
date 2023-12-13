@@ -45,4 +45,24 @@ public class TaskController {
         log.info("Got created task from service: {}", createdTask);
         return taskMapper.taskDtoToTaskResponse(createdTask);
     }
+
+    @PutMapping("/{taskId}")
+    public TaskResponse updateTask(
+            @PathVariable("taskId") Long taskId, @RequestBody TaskRequest taskRequest
+    ) {
+        log.info("Got request for update task with id#{}: {}", taskId, taskRequest);
+        TaskDto taskDto = taskMapper.taskRequestToTaskDto(taskRequest);
+        log.info("Mapped RequestTask to TaskDto: {}", taskDto);
+        TaskDto updatedTask = taskService.updateTask(taskId, taskDto);
+        log.info("Task updated: {}", updatedTask);
+        return taskMapper.taskDtoToTaskResponse(updatedTask);
+    }
+
+    @DeleteMapping("/{taskId}")
+    public void deleteTask(@PathVariable("taskId") Long taskId) {
+        log.info("Got request for delete task by id#{}", taskId);
+        // todo exception if 'id' not exist?
+        taskService.deleteTaskById(taskId);
+        log.info("Task with id#{} deleted", taskId);
+    }
 }
