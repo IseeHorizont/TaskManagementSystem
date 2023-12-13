@@ -24,9 +24,9 @@ public class TaskController {
         return taskService.getTasks();
     }
 
-    @GetMapping("/{id}")
-    public Task getTaskById(@PathVariable Long id) {
-        log.info("Got request for task by {}", id);
-        return taskService.getTaskById(id);
+    @GetMapping("/{taskId}")
+    public Task getTaskById(@PathVariable("taskId") Long taskId) {
+        log.info("Got request for task by {}", taskId);
+        return taskService.getTaskById(taskId);
     }
 }

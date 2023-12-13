@@ -9,6 +9,8 @@ import lombok.*;
 @Builder
 @RequiredArgsConstructor
 @AllArgsConstructor
+@Entity
+@Table(name = "task")
 public class Task {
 
     @Id

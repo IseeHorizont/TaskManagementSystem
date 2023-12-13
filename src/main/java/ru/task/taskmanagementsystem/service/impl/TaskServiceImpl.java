@@ -3,6 +3,7 @@ package ru.task.taskmanagementsystem.service.impl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.task.taskmanagementsystem.entity.Task;
+import ru.task.taskmanagementsystem.exception.TaskServiceException;
 import ru.task.taskmanagementsystem.repository.TaskRepository;
 import ru.task.taskmanagementsystem.service.TaskService;
 
@@ -27,6 +28,6 @@ public class TaskServiceImpl implements TaskService {
     public Task getTaskById(Long id) {
         log.info("Got request for task by id#{}", id);
         return taskRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User with id#" + id + " not found")); // todo custom exception
+                .orElseThrow(() -> new TaskServiceException("User with id#" + id + " not found")); // todo custom exception
     }
 }
