@@ -1,5 +1,6 @@
 package ru.task.taskmanagementsystem.service.impl;
 
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.task.taskmanagementsystem.dto.TaskDto;
@@ -35,7 +36,7 @@ public class TaskServiceImpl implements TaskService {
                 .orElseThrow(() -> new TaskServiceException("User with id#" + id + " not found")); // todo custom exception
     }
 
-    @Override
+    @Transactional
     public TaskDto createTask(TaskDto taskDto) {
         log.info("Got taskDto for create task {}", taskDto);
         taskDto.setAuthorId(1L);// todo add author_id
@@ -43,5 +44,23 @@ public class TaskServiceImpl implements TaskService {
         Task createdTask = taskRepository.save(taskForCreate);
         log.info("Created task: {}", createdTask);
         return taskMapper.taskToTaskDto(createdTask);
+    }
+
+    @Override
+    public TaskDto updateTask(Long id, TaskDto taskDto) {
+        taskRepository.findById(id)
+                .orElseThrow(() -> new TaskServiceException("User with id#" + id + " not found")); // todo custom exception
+
+        taskDto.setId(id);
+        Task updatingTask = taskMapper.taskDtoToTask(taskDto);
+        log.info("Updating task with new data: {}", updatingTask);
+        Task updatedTask = taskRepository.save(updatingTask);
+        log.info("Updated task: {}", updatedTask);
+        return taskMapper.taskToTaskDto(updatedTask);
+    }
+
+    @Transactional
+    public void deleteTaskById(Long id) {
+        taskRepository.deleteById(id);
     }
 }
