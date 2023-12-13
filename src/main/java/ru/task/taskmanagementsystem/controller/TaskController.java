@@ -1,26 +1,32 @@
 package ru.task.taskmanagementsystem.controller;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import ru.task.taskmanagementsystem.entity.Task;
+import ru.task.taskmanagementsystem.service.TaskService;
+
+import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/task/")
+@RequestMapping("/api/v1/task")
 @Slf4j
 public class TaskController {
 
-    // todo getAllTask
+    private final TaskService taskService;
 
+    public TaskController(TaskService taskService) {
+        this.taskService = taskService;
+    }
 
-    // todo getTaskById
+    @GetMapping("/")
+    public List<Task> getTasks() {
+        log.info("Got request for task list");
+        return taskService.getTasks();
+    }
 
-
-    // todo createTask
-
-
-    // todo editTask
-
-
-    // todo deleteTask
-
+    @GetMapping("/{taskId}")
+    public Task getTaskById(@PathVariable("taskId") Long taskId) {
+        log.info("Got request for task by {}", taskId);
+        return taskService.getTaskById(taskId);
+    }
 }
