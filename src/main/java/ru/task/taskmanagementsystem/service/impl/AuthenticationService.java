@@ -3,7 +3,7 @@ package ru.task.taskmanagementsystem.service.impl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import ru.task.taskmanagementsystem.exception.UserNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.task.taskmanagementsystem.dto.RegisterRequest;
@@ -62,9 +62,8 @@ public class AuthenticationService {
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
         log.info("Got authenticationRequest: {}", request);
         authManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
-
         var user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new UsernameNotFoundException(
+                .orElseThrow(() -> new UserNotFoundException(
                         String.format("Пользователь с email: %s не найден", request.getEmail())));
         log.info("Found user: {}", user);
 
