@@ -2,6 +2,8 @@ package ru.task.taskmanagementsystem.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import ru.task.taskmanagementsystem.constant.TaskPriority;
+import ru.task.taskmanagementsystem.constant.TaskStatus;
 
 
 @Getter
@@ -9,6 +11,7 @@ import lombok.*;
 @Builder
 @RequiredArgsConstructor
 @AllArgsConstructor
+@ToString
 @Entity
 @Table(name = "task")
 public class Task {
