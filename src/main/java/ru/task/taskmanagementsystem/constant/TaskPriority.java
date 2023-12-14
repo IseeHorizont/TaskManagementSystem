@@ -1,4 +1,4 @@
-package ru.task.taskmanagementsystem.entity;
+package ru.task.taskmanagementsystem.constant;
 
 public enum TaskPriority {
 
