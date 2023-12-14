@@ -7,7 +7,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.task.taskmanagementsystem.dto.RegisterRequest;
-import ru.task.taskmanagementsystem.service.impl.JwtService;
 import ru.task.taskmanagementsystem.dto.AuthenticationRequest;
 import ru.task.taskmanagementsystem.dto.AuthenticationResponse;
 import ru.task.taskmanagementsystem.entity.Role;
@@ -56,6 +55,7 @@ public class AuthenticationService {
         log.info("Generated user's token: {}", jwtToken);
         return AuthenticationResponse.builder()
                 .token(jwtToken)
+                .role(user.getRole().getName())
                 .build();
     }
 
