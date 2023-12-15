@@ -1,6 +1,8 @@
 package ru.task.taskmanagementsystem.controller;
 
+import jakarta.validation.constraints.Min;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.task.taskmanagementsystem.dto.CommentDto;
 import ru.task.taskmanagementsystem.dto.CommentRequest;
@@ -13,6 +15,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/comment")
 @Slf4j
+@Validated
 public class CommentController {
 
     private final CommentService commentService;
@@ -33,7 +36,7 @@ public class CommentController {
     }
 
     @GetMapping("/{taskId}")
-    public List<CommentResponse> getAllByTaskId(@PathVariable("taskId") Long taskId) {
+    public List<CommentResponse> getAllByTaskId(@PathVariable("taskId") @Min(1) Long taskId) {
         log.info("Looking for all comments by task's id#{}", taskId);
         List<CommentDto> foundComments = commentService.getCommentsByTaskId(taskId);
         log.info("Found comments by task id#{}: {}", taskId, foundComments);
