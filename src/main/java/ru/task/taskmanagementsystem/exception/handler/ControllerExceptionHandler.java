@@ -3,9 +3,11 @@ package ru.task.taskmanagementsystem.exception.handler;
 import jakarta.validation.ConstraintViolationException;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.convert.ConversionFailedException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import ru.task.taskmanagementsystem.dto.ErrorResponse;
@@ -78,10 +80,24 @@ public class ControllerExceptionHandler {
                 .body(new ValidationFailResponse(violations));
     }
 
-    private String createErrorMessage(Exception exception) {
-        final String message = exception.getMessage();
-        log.error(ExceptionHandlerUtils.buildErrorMessage(exception));
-        return message;
+    @ExceptionHandler(ConversionFailedException.class)
+    public ResponseEntity<ErrorResponse> handleConversionFailed(RuntimeException exc) {
+        log.error(exc.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(new ErrorResponse(createErrorMessage(exc)));
+    }
+
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    public ResponseEntity<ErrorResponse> handleMissingServletRequestParameter(
+            MissingServletRequestParameterException exc
+    ) {
+        log.error(exc.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(new ErrorResponse(createErrorMessage(exc)));
+    }
+
+    private String createErrorMessage(@NonNull Exception exception) {
+        return exception.getMessage();
     }
 
     private String getFieldName(String propertyPath) {
