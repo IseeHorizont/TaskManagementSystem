@@ -5,9 +5,8 @@ import jakarta.validation.constraints.Min;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.task.taskmanagementsystem.dto.TaskDto;
-import ru.task.taskmanagementsystem.dto.TaskRequest;
-import ru.task.taskmanagementsystem.dto.TaskResponse;
+import ru.task.taskmanagementsystem.constant.TaskStatus;
+import ru.task.taskmanagementsystem.dto.*;
 import ru.task.taskmanagementsystem.entity.Task;
 import ru.task.taskmanagementsystem.mapper.TaskMapper;
 import ru.task.taskmanagementsystem.service.TaskService;
@@ -68,5 +67,17 @@ public class TaskController {
         log.info("Got request for delete task by id#{}", taskId);
         taskService.deleteTaskById(taskId);
         log.info("Task with id#{} deleted", taskId);
+    }
+
+    @PatchMapping("/{taskId}")
+    public TaskStatusResponse changeTaskStatus(
+            @PathVariable("taskId") @Min(1) Long taskId,
+            @RequestParam("newStatus") TaskStatus newStatus
+    ) {
+        log.info("Got request for change task(id#{}) status to new status: {}",
+                taskId, newStatus);
+        TaskStatus updatedStatus = taskService.changeTaskStatus(taskId, newStatus);
+        log.info("Updated task(id#{}) status: {}", taskId, updatedStatus);
+        return new TaskStatusResponse(updatedStatus.getStatus());
     }
 }

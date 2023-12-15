@@ -5,6 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
+import ru.task.taskmanagementsystem.constant.TaskStatus;
 import ru.task.taskmanagementsystem.dto.TaskDto;
 import ru.task.taskmanagementsystem.entity.Task;
 import ru.task.taskmanagementsystem.entity.User;
@@ -36,7 +38,7 @@ public class TaskServiceImpl implements TaskService {
         return taskRepository.findAll();
     }
 
-    @Override
+    @Transactional
     public Task getTaskById(Long id) {
         log.info("Got request for task by id#{}", id);
         return taskRepository.findById(id)
@@ -57,7 +59,7 @@ public class TaskServiceImpl implements TaskService {
         return taskMapper.taskToTaskDto(createdTask);
     }
 
-    @Override
+    @Transactional
     public TaskDto updateTask(Long id, TaskDto taskDto) {
         taskRepository.findById(id)
                 .orElseThrow(() -> new TaskServiceException("Task with id#" + id + " not found"));
@@ -73,5 +75,17 @@ public class TaskServiceImpl implements TaskService {
     @Transactional
     public void deleteTaskById(Long id) {
         taskRepository.deleteById(id);
+    }
+
+    @Transactional
+    public TaskStatus changeTaskStatus(Long taskId, TaskStatus newStatus) {
+        taskRepository.findById(taskId)
+                .orElseThrow(() -> new TaskServiceException("Task with id#" + taskId + " not found"));
+        log.info("Setting new status for task id#{}: {}", taskId, newStatus);
+        if (taskRepository.setTaskStatusById(newStatus, taskId) != 1) {
+            throw new TaskServiceException("Changing task status failed");
+        }
+        log.info("Updated task status: {}", newStatus);
+        return newStatus;
     }
 }
