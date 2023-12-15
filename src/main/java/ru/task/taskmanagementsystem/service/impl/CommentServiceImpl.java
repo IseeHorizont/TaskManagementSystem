@@ -7,6 +7,7 @@ import ru.task.taskmanagementsystem.dto.CommentDto;
 import ru.task.taskmanagementsystem.entity.Comment;
 import ru.task.taskmanagementsystem.mapper.CommentMapper;
 import ru.task.taskmanagementsystem.repository.CommentRepository;
+import ru.task.taskmanagementsystem.repository.UserRepository;
 import ru.task.taskmanagementsystem.service.CommentService;
 
 import java.util.List;
@@ -18,7 +19,8 @@ public class CommentServiceImpl implements CommentService {
     private final CommentRepository commentRepository;
     private final CommentMapper commentMapper;
 
-    public CommentServiceImpl(CommentRepository commentRepository, CommentMapper commentMapper) {
+    public CommentServiceImpl(
+            CommentRepository commentRepository, CommentMapper commentMapper) {
         this.commentRepository = commentRepository;
         this.commentMapper = commentMapper;
     }

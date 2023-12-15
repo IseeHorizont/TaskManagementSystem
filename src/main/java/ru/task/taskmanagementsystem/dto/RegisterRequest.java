@@ -2,6 +2,7 @@ package ru.task.taskmanagementsystem.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Data;
 
@@ -16,5 +17,6 @@ public class RegisterRequest {
     private String email;
 
     @NotBlank(message = "Пароль не может быть пустым")
+    @Size(min = 5, message = "Минимально допустимая длина пароля: 5 символов")
     private String password;
 }
